@@ -1,16 +1,15 @@
 #!/usr/local/bin/node
 
-var crypto = require('crypto')
-var input = require('commander')
-var fs = require('fs')
+var crypto = require('crypto');
+var input = require('commander');
+var fs = require('fs');
 var Facebook = require('./facebook.js');
 
-
 var encrypt = function (text,password){
-		var cipher = crypto.createCipher('aes-256-cbc',this.password)
-		var crypted = cipher.update(text,'utf8','hex')
-		crypted += cipher.final('hex');
-		return crypted;
+	var cipher = crypto.createCipher('aes-256-cbc',this.password);
+	var crypted = cipher.update(text,'utf8','hex');
+	crypted += cipher.final('hex');
+	return crypted;
 }
 
 var decrypt = function(text,password,callback){
@@ -25,22 +24,63 @@ var readAccessToken = function(callback){
 		process.stdin.destroy();
 		cipherText = fs.readFileSync('access_token','ascii')
 		decrypt(cipherText,password,callback)
-	})
+	});
 }
 
 readAccessToken(function gotAccessToken(accessToken){
 	var app = new Facebook(accessToken);
 
-	query = 'SELECT online_presence,name FROM user WHERE online_presence '
-	+ 'IN ("active","idle") AND uid IN (SELECT uid2 FROM friend WHERE '
-	+ 'uid1 = me()) ORDER BY online_presence';
+	var queries = {};
+
+	queries.onlineFriends = 'SELECT online_presence,name FROM user WHERE '
+	+ 'online_presence IN ("active","idle") AND uid IN (SELECT uid2 FROM '
+	+ 'friend WHERE uid1 = me()) ORDER BY online_presence';
+
+	queries.unreadMessages =  'SELECT sender,body,timestamp FROM unified_message'
+	+ ' WHERE thread_id IN (SELECT thread_id FROM unified_thread WHERE'
+	+ ' has_tags("inbox") AND unread=1) AND unread!=0 ORDER BY timestamp DESC';
+
+	queries.notfications = 'SELECT sender_id,title_text,body_text FROM '
+	+ 'notification WHERE recipient_id = me() AND is_unread!=0 ORDER BY '
+	+ 'updated_time ASC';
+
+	var query = JSON.stringify(queries);
 
 	app.fqlQuery(query, function(d){
-		var res = JSON.parse(d);
-		console.log("\nStatus" + "\t  " + "Friend\n");
-		for(var i=0,len = res.data.length;i<len;i++){
-			console.log(res.data[i].online_presence + "\t  "+res.data[i].name);
+		var res = JSON.parse(d).data;
+
+		for( var i = 0; i < res.length; i++ ){
+			switch(res[i].name){
+
+				case 'onlineFriends' : 
+				var onlineFriends =  res[i].fql_result_set;
+				console.log("\nStatus" + "\t  " + "Friend\n");
+				for( var j=0,len = onlineFriends.length ; j<len ; j++ ){
+					 console.log(onlineFriends[j].online_presence + "\t  "
+					 + onlineFriends[j].name);
+				}
+				console.log('\n');
+				break;
+
+				case 'unreadMessages':
+				var unreadMessages =  res[i].fql_result_set;
+				console.log("\n\nUnread Messages\n");
+				for( var j=0,len = unreadMessages.length ; j<len ; j++ ){
+					 console.log(unreadMessages[j].sender.name + "\t : "
+					 + unreadMessages[j].body);
+				}
+				break;
+
+				case 'notifications':
+				var notfications =  res[i].fql_result_set;
+				console.log("\n\n\Notifications\n\n");
+				for( var j=0,len = notifications.length ; j<len ; j++ ){
+					 console.log(notifications[j].title_text + " : "
+					 + notifications[j].body_text);
+				}
+				break;
+			}
 		}
-		console.log('\n');
+		console.log("\n\n")
 	});
 });

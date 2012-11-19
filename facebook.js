@@ -1,11 +1,13 @@
 
 var https = require('https');
+var fs = require('fs');
 
 function Facebook(accessToken){
   this.accessToken = accessToken;
-  this.appId = '204416083025090';
-  this.appSecret = 'bf206831e0b9c7f73d33315db3c81b65';
-  this.permissions = 'user_online_presence, friends_online_presence';
+	var manifest = JSON.parse(fs.readFileSync("manifest.json"));
+	this.appId = manifest.appId;
+  this.appSecret = manifest.appSecret;
+  this.permissions = manifest.permissions;
 }
 
 Facebook.prototype.fqlQuery = function(query,callback){
