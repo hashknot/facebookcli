@@ -40,7 +40,7 @@ readAccessToken(function gotAccessToken(accessToken){
 	+ ' WHERE thread_id IN (SELECT thread_id FROM unified_thread WHERE'
 	+ ' has_tags("inbox") AND unread=1) AND unread!=0 ORDER BY timestamp DESC';
 
-	queries.notfications = 'SELECT sender_id,title_text,body_text FROM '
+	queries.notifications = 'SELECT sender_id,title_text,body_text FROM '
 	+ 'notification WHERE recipient_id = me() AND is_unread!=0 ORDER BY '
 	+ 'updated_time ASC';
 
@@ -72,7 +72,7 @@ readAccessToken(function gotAccessToken(accessToken){
 				break;
 
 				case 'notifications':
-				var notfications =  res[i].fql_result_set;
+				var notifications =  res[i].fql_result_set;
 				console.log("\n\n\Notifications\n\n");
 				for( var j=0,len = notifications.length ; j<len ; j++ ){
 					 console.log(notifications[j].title_text + " : "
