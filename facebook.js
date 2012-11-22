@@ -17,17 +17,17 @@ Facebook.prototype.fqlQuery = function(query,callback){
 	method: 'GET'
   };
   connectOptions.path += encodeURIComponent(query) + '&' + this.accessToken;
-  var request = https.request(connectOptions, function(response){
-	  if(response.statusCode == 400){
-	  console.log("\n\nOops! Something went wrong :( \n\nHere's what I know : " 
-		+ "\n\nResponse HTTP Code : 400");
-	  console.log(response.headers);
-	  }
-	  else{
-	  response.on('data', callback);
-	  }
-	  });
+	var request = https.request(connectOptions, function(response){
+		if(response.statusCode == 400){
+			console.log("\n\nOops! Something went wrong\n\nHere's what I know :" + 
+			"\n\nResponse HTTP Code : 400");
+			console.log(response.headers);
+		}
+		else{
+			response.on('data', callback);
+		}
+	});
   request.end();
-}
+};
 
-module.exports = Facebook 
+module.exports = Facebook;

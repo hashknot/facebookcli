@@ -1,5 +1,5 @@
 {
 	"appId" : "put your appid here",
 	"appSecret" : "put your appsecret here",
-	"permissions" : "user_online_presence, friends_online_presence"
+	"permissions" : "notifications, user_online_presence, friends_online_presence"
 }

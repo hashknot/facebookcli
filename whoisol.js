@@ -52,7 +52,7 @@ readAccessToken(function gotAccessToken(accessToken){
 		for( var i = 0; i < res.length; i++ ){
 			switch(res[i].name){
 
-				case 'onlineFriends' : 
+				case 'onlineFriends' :
 				var onlineFriends =  res[i].fql_result_set;
 				console.log("\nStatus" + "\t  " + "Friend\n");
 				for( var j=0,len = onlineFriends.length ; j<len ; j++ ){
