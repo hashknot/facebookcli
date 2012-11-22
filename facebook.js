@@ -8,6 +8,7 @@ function Facebook(accessToken){
 	this.appId = manifest.appId;
   this.appSecret = manifest.appSecret;
   this.permissions = manifest.permissions;
+	this.appUrl = 'http://localhost:16792/';
 }
 
 Facebook.prototype.query = function(query,callback){
@@ -28,6 +29,27 @@ Facebook.prototype.query = function(query,callback){
 		}
 	});
   request.end();
+};
+
+Facebook.prototype.getAuthUrl = function(){
+	var dialogUrl = 'https://www.facebook.com/dialog/oauth' + 
+	'?client_id=' + this.appId + 
+	'&redirect_uri=' + encodeURIComponent(this.appUrl) + 
+	'&scope=' + encodeURIComponent(this.permissions);
+	return dialogUrl;
+};
+
+Facebook.prototype.authorize = function(callback){
+	console.log('To authorize, visit : ' + this.getAuthUrl());
+	this.authResponseWait(this.acquireAccessToken);
+};
+
+Facebook.prototype.authResponseWait = function(callback){
+
+};
+
+Facebook.prototype.acquireAccessToken = function(code,callback){
+
 };
 
 module.exports = Facebook;
