@@ -10,7 +10,7 @@ function Facebook(accessToken){
   this.permissions = manifest.permissions;
 }
 
-Facebook.prototype.fqlQuery = function(query,callback){
+Facebook.prototype.query = function(query,callback){
   var connectOptions = { host: 'graph.facebook.com',
 	port: 443,
 	path:'/fql?q=' ,

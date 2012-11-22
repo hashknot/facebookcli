@@ -46,7 +46,7 @@ readAccessToken(function gotAccessToken(accessToken){
 
 	var query = JSON.stringify(queries);
 
-	app.fqlQuery(query, function(d){
+	app.query(query, function(d){
 		var res = JSON.parse(d).data;
 
 		for( var i = 0; i < res.length; i++ ){
