@@ -25,7 +25,12 @@ Facebook.prototype.query = function(query,callback){
 			console.log(response.headers);
 		}
 		else{
-			response.on('data', callback);
+			var data='';
+			response.on('data', function(d){ data += d;});
+			response.on('end',function(){ callback(data); });
+			response.on('close',function(){
+				 console.log("\n\nOops! Something went wrong\n");
+			});
 		}
 	});
   request.end();
