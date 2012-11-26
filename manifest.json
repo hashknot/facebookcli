@@ -1,5 +1,6 @@
 {
 	"appId" : "put your appid here",
 	"appSecret" : "put your appsecret here",
-	"permissions" : "notifications, user_online_presence, friends_online_presence"
+	"permissions" : "manage_notifications, user_online_presence, friends_online_presence",
+	"appServerPort" : 8080
 }
