@@ -14,20 +14,6 @@ var init = function(callback){
 	});
 };
 
-var encrypt = function (text,password){
-  var cipher = crypto.createCipher('aes-256-cbc',password);
-  var crypted = cipher.update(text,'utf8','hex');
-  crypted += cipher.final('hex');
-  return crypted;
-};
-
-var decrypt = function(text,password,callback){
-  var decipher = crypto.createDecipher('aes-256-cbc',password);
-  var dec = decipher.update(text,'hex','utf8');
-  dec += decipher.final('utf8');
-  callback(dec);
-};
-
 var setup = function(callback){
 	app.authorize(saveAccessToken);
 };
@@ -201,3 +187,20 @@ module.exports.init = init;
  * 	});
  * });
  */
+
+/*
+ * Private functions encrypt/decrypt
+ */
+var encrypt = function (text,password){
+	var cipher = crypto.createCipher('aes-256-cbc',password);
+	var crypted = cipher.update(text,'utf8','hex');
+	crypted += cipher.final('hex');
+	return crypted;
+};
+
+var decrypt = function(text,password,callback){
+	var decipher = crypto.createDecipher('aes-256-cbc',password)
+	var dec = decipher.update(text,'hex','utf8');
+	dec += decipher.final('utf8');
+	callback(dec);
+};
