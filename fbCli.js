@@ -60,6 +60,88 @@ var readAccessToken = function(callback){
 	});
 };
 
+
+var unreadMessages = {};
+unreadMessages.raw = null;
+unreadMessages.data = null;
+unreadMessages.query = 'SELECT sender,body,timestamp FROM unified_message' +
+	' WHERE thread_id IN (SELECT thread_id FROM unified_thread WHERE' +
+	' has_tags("inbox") AND unread=1) AND unread!=0 ORDER BY timestamp DESC';
+
+unreadMessages.get = function(callback){
+	var that = this;
+	app.query(this.query,function(d){
+		that.raw = d;
+		that.data = JSON.parse(that.raw).data;
+		callback(that.data);
+	});
+};
+
+unreadMessages.display = function(data){
+	if(data == undefined)
+		data = this.data;
+	for( var j=0,len = data.length ; j<len ; j++ ){
+		console.log(data[j].sender.name + "\t : " + data[j].body);
+	}
+};
+
+
+var notifications = {};
+notifications.raw = null;
+notifications.data = null;
+notifications.query = 'SELECT sender_id,title_text,body_text FROM ' +
+	'notification WHERE recipient_id = me() AND is_unread!=0 ORDER BY ' +
+	'updated_time ASC';
+
+notifications.get = function(callback){
+	var that = this;
+	app.query(this.query,function(d){
+		that.raw = d;
+		that.data = JSON.parse(that.raw).data;
+		callback(that.data);
+	});
+};
+
+notifications.display = function(data){
+	if(data == undefined)
+		data = this.data;
+	for( var j=0,len = data.length ; j<len ; j++ ){
+		console.log(data[j].title_text + " : " + data[j].body_text);
+	}
+};
+
+
+var onlineFriends = {};
+onlineFriends.raw = null;
+onlineFriends.data = null;
+onlineFriends.query = 'SELECT online_presence,name FROM user WHERE ' +
+	'online_presence IN ("active","idle") AND uid IN (SELECT uid2 FROM ' +
+	'friend WHERE uid1 = me()) ORDER BY online_presence';
+
+onlineFriends.get = function(callback){
+	var that = this;
+	app.query(this.query,function(d){
+		that.raw = d;
+		that.data = JSON.parse(that.raw).data;
+		callback(that.data);
+	});
+};
+
+onlineFriends.display = function(data){
+	if(data == undefined)
+		data = this.data;
+	for( var j=0,len = data.length ; j<len ; j++ ){
+		console.log(data[j].online_presence + "\t  " + data[j].name);
+	}
+};
+
+
+module.exports.onlineFriends = onlineFriends;
+module.exports.notifications = notifications;
+module.exports.unreadMessages = unreadMessages;
+module.exports.setup = setup;
+module.exports.init = init;
+
 /*
  * readAccessToken(function gotAccessToken(accessToken){
  * 	var app = new Facebook(accessToken);
