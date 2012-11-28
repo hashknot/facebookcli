@@ -5,24 +5,32 @@ var input = require('commander');
 var fs = require('fs');
 var Facebook = require('./facebook.js');
 
+var app = new Facebook();
+
+var init = function(callback){
+	readAccessToken(function(accessToken){
+		app.accessToken = accessToken;
+		callback();
+	});
+};
+
 var encrypt = function (text,password){
-	var cipher = crypto.createCipher('aes-256-cbc',password);
-	var crypted = cipher.update(text,'utf8','hex');
-	crypted += cipher.final('hex');
-	return crypted;
-}
+  var cipher = crypto.createCipher('aes-256-cbc',password);
+  var crypted = cipher.update(text,'utf8','hex');
+  crypted += cipher.final('hex');
+  return crypted;
+};
 
 var decrypt = function(text,password,callback){
-	var decipher = crypto.createDecipher('aes-256-cbc',password)
-	var dec = decipher.update(text,'hex','utf8')
-	dec += decipher.final('utf8');
-	callback(dec);
-}
+  var decipher = crypto.createDecipher('aes-256-cbc',password);
+  var dec = decipher.update(text,'hex','utf8');
+  dec += decipher.final('utf8');
+  callback(dec);
+};
 
 var setup = function(callback){
-	var app = new Facebook();
 	app.authorize(saveAccessToken);
-}
+};
 
 var saveAccessToken = function(accessToken){
 	newPassword(function(password){
