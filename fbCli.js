@@ -27,10 +27,10 @@ var setup = function(callback){
 var saveAccessToken = function(accessToken){
 	newPassword(function(password){
 		var ciphertxt = encrypt(accessToken,password);
-		fs.writeFileSync('test',ciphertxt,'ascii');
+		fs.writeFileSync('access_token',ciphertxt,'ascii');
 		console.log('Setup Complete');
 	});
-}
+};
 
 var newPassword = function(validPassCallback){
 	input.password("Enter Password : ",function(password){
@@ -43,17 +43,14 @@ var newPassword = function(validPassCallback){
 				validPassCallback(password);
 		});
 	});
-}
-
-module.exports.saveAccessToken = saveAccessToken;
+};
 
 var readAccessToken = function(callback){
 	input.password("Enter password : ",function readPassword(password){
-		// process.stdin.destroy();
-		cipherText = fs.readFileSync('test','ascii')
-		decrypt(cipherText,password,callback)
+		cipherText = fs.readFileSync('access_token','ascii');
+		decrypt(cipherText,password,callback);
 	});
-}
+};
 
 /*
  * readAccessToken(function gotAccessToken(accessToken){
