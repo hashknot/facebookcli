@@ -1,5 +1,3 @@
-#!/usr/local/bin/node
-
 var crypto = require('crypto');
 var input = require('commander');
 var fs = require('fs');
