@@ -20,11 +20,13 @@ var saveAccessToken = function(accessToken){
 	newPassword(function(password){
 		var ciphertxt = encrypt(accessToken,password);
 		fs.writeFileSync('access_token',ciphertxt,'ascii');
-		console.log('Setup Complete');
+		console.log('Auth Complete');
 	});
 };
 
 var newPassword = function(validPassCallback){
+	console.log("\nThis password is for accessing this app."+
+	"\n\n**We DO NOT WANT you to enter your FACEBOOK ACCOUNT PASSWORD.**\n\n");
 	input.password("Enter Password : ",function(password){
 		input.password("Enter Password Again : ",function(confirmPass){
 			if(password !== confirmPass){

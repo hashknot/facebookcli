@@ -58,14 +58,19 @@ Facebook.prototype.createAppServer = function(responseCallback){
 	server=http.createServer(responseCallback).listen(this.appPort,'127.0.0.1');
 };
 
+Facebook.prototype.validate = function(callback){
+	callback(true);
+};
+
 Facebook.prototype.acquireAccessToken = function(req,res){
 	console.log("Request : " + req.url);
 	res.writeHead(200, {'Content-Type': 'text/plain'});
 	if(req.url.indexOf('code=') == -1 ){
-		res.end('App is waiting for a valid access_token');
+		res.end('Waiting for a valid access_token');
 		return;
 	}
-	res.end('Access_token acquired. You can close this tab/window');
+	res.end('Access_token acquired. You can close this tab/window.' +
+			'Please enter password at the terminal window.');
 	req.connection.destroy();
 	var code = req.url.match(/[^=.]*$/)[0];
 	server.close();
