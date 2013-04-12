@@ -26,7 +26,7 @@ var saveAccessToken = function(accessToken){
 
 var newPassword = function(validPassCallback){
 	console.log("\nThis password is for accessing this app."+
-	"\n\n**We DO NOT WANT you to enter your FACEBOOK ACCOUNT PASSWORD.**\n\n");
+	"\n\n**AVOID ENTERING YOUR FACEBOOK ACCOUNT PASSWORD.**\n\n");
 	input.password("Enter Password : ",function(password){
 		input.password("Enter Password Again : ",function(confirmPass){
 			if(password !== confirmPass){
@@ -102,7 +102,7 @@ onlineFriends.raw = null;
 onlineFriends.data = null;
 onlineFriends.query = 'SELECT online_presence,name FROM user WHERE ' +
 	'online_presence IN ("active","idle") AND uid IN (SELECT uid2 FROM ' +
-	'friend WHERE uid1 = me()) ORDER BY online_presence';
+	'friend WHERE uid1 = me()) ORDER BY name';
 
 onlineFriends.get = function(callback){
 	var that = this;
