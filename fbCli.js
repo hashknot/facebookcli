@@ -1,7 +1,7 @@
 var crypto = require('crypto');
 var input = require('commander');
 var fs = require('fs');
-var Facebook = require('./facebook.js');
+var Facebook = require('./api.js');
 
 var app = new Facebook();
 
