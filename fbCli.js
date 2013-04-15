@@ -1,6 +1,7 @@
 var crypto = require('crypto');
 var input = require('commander');
 var fs = require('fs');
+var path = require('path');
 var Facebook = require('./api.js');
 
 var app = new Facebook();
@@ -41,7 +42,7 @@ var newPassword = function(validPassCallback){
 
 var readAccessToken = function(callback,password){
 	var readPassword =  function(pass){
-		cipherText = fs.readFileSync('access_token','ascii');
+		cipherText=fs.readFileSync(path.resolve(__dirname,'access_token'),'ascii');
 		decrypt(cipherText,pass,callback);
 	};
 	if(typeof(password) === "undefined" || password === null){
