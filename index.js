@@ -7,12 +7,16 @@ usage('Facebook CLI').
 boolean(['h','a']).
 alias('a','authenticate').
 alias('h','help').
+alias('q','query').
+alias('p','password').
 // alias('e','everything').
 // alias('n','notifications').
 // alias('o','online').
 // alias('m','messages').
 describe('a','To setup Authorization,AccessToken').
 describe('h','Print this help').
+describe('q','Execute an FQL Query').
+describe('p','Use this password.').
 // describe('e','Get Everything').
 // describe('n','Get notifications').
 // describe('o','Get online friends').
@@ -26,11 +30,18 @@ if(argv.h){
 
 if(argv.a){
 	Facebook.setup();
-	// process.exit();
 }
 else{
 	var main = function(){
-		Facebook.allInfo.get(Facebook.allInfo.display);
+		if(argv.q){
+			Facebook.query(argv.q,console.log);
+		}
+		else{
+			Facebook.allInfo.get(Facebook.allInfo.display);
+		}
 	};
-	Facebook.init(main);
+	if(argv.p)
+		Facebook.init(main,argv.p);
+	else
+		Facebook.init(main);
 }

@@ -5,11 +5,11 @@ var Facebook = require('./facebook.js');
 
 var app = new Facebook();
 
-var init = function(callback){
+var init = function(callback,password){
 	readAccessToken(function(accessToken){
 		app.accessToken = accessToken;
 		callback();
-	});
+	},password);
 };
 
 var setup = function(callback){
@@ -39,11 +39,17 @@ var newPassword = function(validPassCallback){
 	});
 };
 
-var readAccessToken = function(callback){
-	input.password("Enter password : ",function readPassword(password){
+var readAccessToken = function(callback,password){
+	var readPassword =  function(pass){
 		cipherText = fs.readFileSync('access_token','ascii');
-		decrypt(cipherText,password,callback);
-	});
+		decrypt(cipherText,pass,callback);
+	};
+	if(typeof(password) === "undefined" || password === null){
+		input.password("Enter password : ",readPassword);
+	}
+	else{
+		readPassword(password);
+	}
 };
 
 
@@ -177,7 +183,15 @@ allInfo.display = function(data){
 };
 
 
+fqlQuery = function(query, callback){
+	app.query(query,function(d){
+		callback(JSON.parse(d));
+	});
+};
+
+
 module.exports.onlineFriends = onlineFriends;
+module.exports.query = fqlQuery;
 module.exports.notifications = notifications;
 module.exports.unreadMessages = unreadMessages;
 module.exports.allInfo = allInfo;
