@@ -20,7 +20,7 @@ var setup = function(callback){
 var saveAccessToken = function(accessToken){
 	newPassword(function(password){
 		var ciphertxt = encrypt(accessToken,password);
-		fs.writeFileSync('access_token',ciphertxt,'ascii');
+		fs.writeFileSync(path.resolve(__dirname,'access_token'),ciphertxt,'ascii');
 		console.log('Auth Complete');
 	});
 };

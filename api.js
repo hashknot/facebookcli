@@ -1,11 +1,11 @@
-
 var https = require('https');
 var fs = require('fs');
 var http = require('http');
+var path = require('path');
 
 function Facebook(accessToken){
   this.accessToken = accessToken;
-	var manifest = JSON.parse(fs.readFileSync("manifest.json"));
+	var manifest = JSON.parse(fs.readFileSync(path.resolve(__dirname,'manifest.json'),'ascii'));
 	this.appId = manifest.appId;
   this.appSecret = manifest.appSecret;
   this.permissions = manifest.permissions;
